@@ -1,0 +1,26 @@
+Konsep yang paling aman dan rapi adalah seperti ini:
+
+Sistem Survei Lingkungan Belajar berbasis web
+Tujuannya:
+
+siswa mengisi survei tentang kondisi belajar,
+admin mengelola pertanyaan, periode survei, dan data pengguna,
+sistem mengolah hasil jawaban,
+hasil ditampilkan dalam bentuk rekap, grafik, dan laporan evaluasi.
+Ini sesuai dengan ruang lingkup dan tujuan yang tertulis di laporan, terutama bahwa sistem dipakai untuk input data survei, pengolahan hasil, dan penyajian laporan otomatis.
+Fokus fitur utama
+Login multi-role.
+Kelola data user.
+Kelola kuesioner dan pertanyaan.
+Siswa mengisi survei.
+Sistem menghitung hasil.
+Sistem mengelompokkan hasil.
+Admin melihat laporan dan grafik.
+
+Kalau mau lebih kuat untuk skripsi, sebaiknya role yang benar-benar aktif hanya 2 atau 3:
+
+Admin: kelola sistem
+Siswa: isi survei
+Guru/Kepala sekolah: lihat laporan saja
+
+Karena di laporan ada sedikit ketidakkonsistenan antara peran pengguna, jadi ini perlu diseragamkan supaya tidak membingungkan.
