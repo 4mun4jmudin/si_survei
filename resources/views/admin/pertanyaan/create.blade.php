@@ -18,7 +18,7 @@
                     <select name="kuesioner_id" id="kuesioner_id" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition @error('kuesioner_id') border-red-500 @enderror">
                         <option value="">-- Pilih Kuesioner --</option>
                         @foreach($kuesioners as $k)
-                            <option value="{{ $k->id }}" {{ old('kuesioner_id') == $k->id ? 'selected' : '' }}>
+                            <option value="{{ $k->id }}" {{ (old('kuesioner_id', $selectedKuesionerId) == $k->id) ? 'selected' : '' }}>
                                 {{ $k->nama_kuesioner }} ({{ ucfirst($k->status) }})
                             </option>
                         @endforeach
@@ -41,7 +41,7 @@
                     <!-- Nomor Urutan -->
                     <div>
                         <label for="nomor_urutan" class="block text-sm font-medium text-gray-700 mb-2">Nomor Urutan <span class="text-red-500">*</span></label>
-                        <input type="number" name="nomor_urutan" id="nomor_urutan" value="{{ old('nomor_urutan') }}" required min="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition @error('nomor_urutan') border-red-500 @enderror" placeholder="Contoh: 1">
+                        <input type="number" name="nomor_urutan" id="nomor_urutan" value="{{ old('nomor_urutan', $defaultOrder) }}" required min="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition @error('nomor_urutan') border-red-500 @enderror" placeholder="Contoh: 1">
                         @error('nomor_urutan')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror
@@ -92,4 +92,34 @@
             </form>
         </div>
     </div>
+    
+    <script>
+        const kuesionerSelect = document.getElementById('kuesioner_id');
+        const nomorUrutanInput = document.getElementById('nomor_urutan');
+
+        kuesionerSelect.addEventListener('change', function() {
+            const kuesionerId = this.value;
+            
+            if (kuesionerId) {
+                // Fetch nomor urutan berikutnya dari server
+                fetch(`/admin/pertanyaan/next-order/${kuesionerId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        nomorUrutanInput.value = data.next_order;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching next order:', error);
+                    });
+            } else {
+                nomorUrutanInput.value = '';
+            }
+        });
+
+        // Trigger on load if kuesioner already selected but nomor_urutan is empty
+        window.addEventListener('DOMContentLoaded', (event) => {
+            if (kuesionerSelect.value && !nomorUrutanInput.value) {
+                kuesionerSelect.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
 </x-admin-layout>

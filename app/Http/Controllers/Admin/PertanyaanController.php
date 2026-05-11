@@ -25,10 +25,23 @@ class PertanyaanController extends Controller
         return view('admin.pertanyaan.index', compact('pertanyaans', 'kuesioners'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $kuesioners = Kuesioner::all();
-        return view('admin.pertanyaan.create', compact('kuesioners'));
+        $selectedKuesionerId = $request->kuesioner_id;
+        $defaultOrder = null;
+
+        if ($selectedKuesionerId) {
+            $defaultOrder = Pertanyaan::where('kuesioner_id', $selectedKuesionerId)->max('nomor_urutan') + 1;
+        }
+
+        return view('admin.pertanyaan.create', compact('kuesioners', 'selectedKuesionerId', 'defaultOrder'));
+    }
+
+    public function getNextOrder(Kuesioner $kuesioner)
+    {
+        $nextOrder = Pertanyaan::where('kuesioner_id', $kuesioner->id)->max('nomor_urutan') + 1;
+        return response()->json(['next_order' => $nextOrder]);
     }
 
     public function store(Request $request)

@@ -73,6 +73,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('kuesioner', Admin\KuesionerController::class)->except(['show']);
 
     // Pertanyaan
+    Route::get('/pertanyaan/next-order/{kuesioner}', [Admin\PertanyaanController::class, 'getNextOrder'])->name('pertanyaan.next-order');
     Route::resource('pertanyaan', Admin\PertanyaanController::class)->except(['show']);
 
     // Pengaturan
