@@ -2,7 +2,7 @@
     <div class="py-12 bg-slate-50 min-h-screen">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-8">
-                <a href="{{ route('siswa.dashboard') }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-indigo-600 transition mb-6">
+                <a href="{{ route('guru.dashboard') }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-indigo-600 transition mb-6">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                     Kembali ke Dashboard
                 </a>
@@ -42,7 +42,7 @@
                             <h3 class="text-xl font-bold mb-4">Siap untuk memberikan suara?</h3>
                             <p class="text-indigo-100 mb-8 max-w-md">Klik tombol di bawah untuk memulai. Progress Anda akan tersimpan secara otomatis setiap kali Anda menjawab.</p>
                             
-                            <a href="{{ route('siswa.survei.show', $kuesioner) }}" class="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-indigo-600 font-black rounded-2xl hover:bg-indigo-50 transition shadow-xl group-hover:scale-105">
+                            <a href="{{ route('guru.survei.show', $kuesioner) }}" class="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-indigo-600 font-black rounded-2xl hover:bg-indigo-50 transition shadow-xl group-hover:scale-105">
                                 Mulai Sekarang
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             </a>

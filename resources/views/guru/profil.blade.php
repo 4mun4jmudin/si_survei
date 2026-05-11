@@ -18,12 +18,12 @@
                         
                         <div class="space-y-3">
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">NISN</span>
-                                <span class="text-sm font-bold text-gray-700">{{ $user->siswa->nisn ?? '-' }}</span>
+                                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">NIP</span>
+                                <span class="text-sm font-bold text-gray-700">{{ $user->guru->nip ?? '-' }}</span>
                             </div>
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Kelas</span>
-                                <span class="text-sm font-bold text-gray-700">{{ $user->siswa->kelas ?? '-' }}</span>
+                                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Mapel / Posisi</span>
+                                <span class="text-sm font-bold text-gray-700">{{ $user->guru->mapel ?? '-' }}</span>
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                             <h3 class="text-xl font-bold text-gray-900">Ubah Password</h3>
                         </div>
 
-                        <form action="{{ route('siswa.profil.password') }}" method="POST" class="space-y-6">
+                        <form action="{{ route('guru.profil.password') }}" method="POST" class="space-y-6">
                             @csrf
                             @method('PUT')
 

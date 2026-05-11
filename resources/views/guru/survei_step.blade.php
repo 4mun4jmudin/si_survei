@@ -17,7 +17,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('siswa.survei.store', $kuesioner) }}" method="POST" id="surveyForm">
+            <form action="{{ route('guru.survei.store', $kuesioner) }}" method="POST" id="surveyForm">
                 @csrf
 
                 @foreach($pertanyaanGrouped as $indicator => $questions)

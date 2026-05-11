@@ -1,60 +1,136 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SiSurvei Akademik
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**SiSurvei Akademik** adalah sistem informasi manajemen survei dan kuesioner berskala instansi/sekolah yang dirancang untuk mengumpulkan, mengelola, dan menganalisis *feedback* dari Siswa dan Guru. Dibangun menggunakan **Laravel 11/12** dan **Tailwind CSS**, sistem ini menawarkan antarmuka yang modern (premium look), interaktif, dan responsif, serta dilengkapi dengan fitur analitik cerdas (K-Means Clustering).
 
-## About Laravel
+## 🚀 Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 1. Multi-Role Authentication
+- **Admin**: Mengelola seluruh data master, membuat kuesioner, memantau respons, mengatur konfigurasi global (Logo, Nama Sekolah), serta melihat hasil analisis survei (Termasuk algoritma K-Means).
+- **Siswa**: Memiliki portal khusus untuk melihat riwayat survei, mengisi kuesioner interaktif, dan mengatur profil/password.
+- **Guru**: Memiliki portal tersendiri untuk berpartisipasi dalam pengisian survei evaluasi sekolah.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 2. Manajemen Kuesioner Dinamis
+- Pembuatan soal/pertanyaan yang dinamis dengan pengelompokan berdasarkan **Indikator**.
+- Skala Likert 1-5 (Sangat Tidak Setuju - Sangat Setuju).
+- Periode kuesioner (tanggal mulai dan selesai) serta status aktif/draft.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 3. Analitik & Pelaporan
+- **Dashboard Statistik**: Total responden, rata-rata skor per indikator, dan kategori penilaian (Sangat Baik, Baik, Cukup, Kurang).
+- **K-Means Clustering**: Pengelompokan siswa berdasarkan pola jawaban untuk menemukan kluster spesifik (misalnya: puas terhadap fasilitas tapi kurang di pengajaran).
+- **Export Data**: Unduh data mentah jawaban ke **Excel** (`.xlsx`) untuk diolah lebih lanjut.
+- **Cetak PDF**: Unduh laporan analisis ke dalam format PDF yang siap dicetak.
 
-## Learning Laravel
+### 4. Utilitas & Otomatisasi
+- **Global Settings**: Ubah logo dan nama sekolah langsung dari dashboard Admin tanpa menyentuh *source code*.
+- **Bulk Import Excel**: Unggah data ratusan Siswa dan Guru sekaligus menggunakan file Excel (membuat akun login + profil otomatis).
+- **Notification System**: Banner peringatan interaktif jika pengguna memiliki kuesioner aktif yang belum diisi.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Teknologi yang Digunakan
+- **Backend**: Laravel (PHP)
+- **Frontend**: Blade Templating, Tailwind CSS, Alpine.js
+- **Database**: MySQL
+- **Assets/Build Tool**: Vite
+- **Packages**:
+  - `maatwebsite/excel` (Import/Export Excel)
+  - `barryvdh/laravel-dompdf` (Cetak Laporan PDF)
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 💻 Cara Instalasi (Local Development)
 
-### Premium Partners
+Ikuti langkah-langkah berikut untuk menjalankan sistem ini di komputer Anda:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 1. Prasyarat Sistem
+Pastikan Anda telah menginstal perangkat lunak berikut:
+- **PHP** >= 8.2
+- **Composer** (Package Manager PHP)
+- **Node.js & npm** (Untuk kompilasi frontend Vite)
+- **MySQL** (Atau aplikasi bundle seperti XAMPP / Laragon)
+- **Git**
 
-## Contributing
+### 2. Kloning Repositori
+Clone proyek ini ke dalam folder komputer Anda:
+```bash
+git clone https://github.com/4mun4jmudin/si_survei.git
+cd si_survei
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Install Dependensi PHP & Node
+Jalankan perintah berikut untuk menginstal semua *library* yang dibutuhkan:
+```bash
+# Install package PHP
+composer install
 
-## Code of Conduct
+# Install package Frontend
+npm install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Konfigurasi Environment (`.env`)
+Salin file konfigurasi bawaan dan ubah sesuai pengaturan database lokal Anda:
+```bash
+cp .env.example .env
+```
+Buka file `.env` dan sesuaikan bagian database:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nama_database_anda
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Security Vulnerabilities
+### 5. Generate Application Key & Storage Link
+```bash
+# Buat App Key
+php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Link folder storage agar gambar (logo sekolah) bisa diakses secara publik
+php artisan storage:link
+```
 
-## License
+### 6. Migrasi Database & Seeding (Opsional)
+Buat struktur tabel di database Anda (pastikan Anda sudah membuat database kosong di MySQL sebelumnya):
+```bash
+php artisan migrate
+```
+*(Catatan: Jika ada *seeder* bawaan untuk akun admin, Anda bisa menjalankannya dengan `php artisan migrate --seed`)*.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# si_survei
+### 7. Kompilasi Assets Frontend
+Agar tampilan Tailwind CSS dan Alpine.js berjalan dengan sempurna, lakukan proses kompilasi:
+```bash
+# Untuk keperluan development (Live Reload)
+npm run dev
+
+# ATAU, untuk keperluan production
+npm run build
+```
+
+### 8. Jalankan Server Lokal
+Buka terminal baru (atau biarkan `npm run dev` tetap berjalan), lalu jalankan perintah:
+```bash
+php artisan serve
+```
+Aplikasi kini dapat diakses melalui browser di alamat: `http://localhost:8000`
+
+---
+
+## 🔐 Kredensial Default
+Jika Anda menggunakan *seeder* / data contoh, gunakan akses berikut untuk masuk:
+
+| Role | Username | Password |
+|---|---|---|
+| **Admin** | `admin` | `password` |
+| **Siswa** | `siswa` / NIS siswa | `password123` |
+| **Guru** | `guru` / NIP guru | `password123` |
+
+*(Harap segera ubah password default setelah sistem berjalan)*.
+
+---
+
+## 📝 Lisensi
+Proyek ini dibuat untuk keperluan akademis dan manajemen sekolah. Kode sumber (*source code*) dilindungi dan merupakan hak cipta pengembang. 
+
+Dibuat dengan ❤️ untuk kemajuan pendidikan.
