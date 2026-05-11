@@ -276,7 +276,7 @@
                         {{ $item->indikator ?: 'Umum' }}
                     </div>
 
-                    <h2 class="question-text">{{ $item->teks_pertanyaan }}</h2>
+                    <h2 class="question-text">{{ $item->isi_pertanyaan }}</h2>
 
                     <div class="options-grid">
                         @php
