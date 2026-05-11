@@ -70,7 +70,10 @@ class SiswaController extends Controller
             ->get()
             ->groupBy('indikator');
 
-        return view('siswa.survei_step', compact('kuesioner', 'pertanyaanGrouped'));
+        // Flat list untuk mode 1 pertanyaan per layar
+        $allPertanyaan = $kuesioner->pertanyaan()->orderBy('nomor_urutan')->get();
+
+        return view('siswa.survei_step', compact('kuesioner', 'pertanyaanGrouped', 'allPertanyaan'));
     }
 
     public function simpanSurvei(Request $request, Kuesioner $kuesioner)
