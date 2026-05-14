@@ -307,24 +307,72 @@
                     <h2 class="question-text">{{ $item->isi_pertanyaan }}</h2>
 
                     <div class="options-grid">
-                        @php
-                            $options = [
-                                1 => ['label' => 'Sangat Tidak Setuju', 'key' => '1', 'emoji' => '😞'],
-                                2 => ['label' => 'Tidak Setuju', 'key' => '2', 'emoji' => '😕'],
-                                3 => ['label' => 'Netral', 'key' => '3', 'emoji' => '😐'],
-                                4 => ['label' => 'Setuju', 'key' => '4', 'emoji' => '🙂'],
-                                5 => ['label' => 'Sangat Setuju', 'key' => '5', 'emoji' => '😄'],
-                            ];
-                        @endphp
+                        @if($item->tipe_jawaban == 'skala_likert')
+                            @php
+                                $options = [
+                                    1 => ['label' => 'Sangat Tidak Setuju', 'key' => '1', 'emoji' => '😞'],
+                                    2 => ['label' => 'Tidak Setuju', 'key' => '2', 'emoji' => '😕'],
+                                    3 => ['label' => 'Netral', 'key' => '3', 'emoji' => '😐'],
+                                    4 => ['label' => 'Setuju', 'key' => '4', 'emoji' => '🙂'],
+                                    5 => ['label' => 'Sangat Setuju', 'key' => '5', 'emoji' => '😄'],
+                                ];
+                            @endphp
 
-                        @foreach($options as $val => $opt)
-                        <label class="option-card" data-value="{{ $val }}">
-                            <input type="radio" name="jawaban[{{ $item->id }}]" value="{{ $val }}" required>
-                            <div class="option-key">{{ $opt['emoji'] }}</div>
-                            <span class="option-label">{{ $opt['label'] }}</span>
-                            <svg class="option-check" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        </label>
-                        @endforeach
+                            @foreach($options as $val => $opt)
+                            <label class="option-card" data-value="{{ $val }}">
+                                <input type="radio" name="jawaban[{{ $item->id }}]" value="{{ $val }}" required>
+                                <div class="option-key">{{ $opt['emoji'] }}</div>
+                                <span class="option-label">{{ $opt['label'] }}</span>
+                                <svg class="option-check" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            </label>
+                            @endforeach
+
+                        @elseif($item->tipe_jawaban == 'pilihan_ganda')
+                            @php
+                                // Pecah baris-per-baris
+                                $rawOptions = explode("\n", str_replace("\r", "", $item->opsi_jawaban));
+                                $finalOptions = [];
+                                foreach($rawOptions as $idx => $line) {
+                                    if(trim($line) == "") continue;
+                                    // Format Label|Nilai
+                                    if(str_contains($line, '|')) {
+                                        $parts = explode('|', $line);
+                                        $finalOptions[] = [
+                                            'label' => trim($parts[0]),
+                                            'value' => trim($parts[1]),
+                                            'key' => chr(65 + $idx) // A, B, C...
+                                        ];
+                                    } else {
+                                        $finalOptions[] = [
+                                            'label' => trim($line),
+                                            'value' => $idx + 1,
+                                            'key' => chr(65 + $idx)
+                                        ];
+                                    }
+                                }
+                            @endphp
+
+                            @foreach($finalOptions as $opt)
+                            <label class="option-card" data-value="{{ $opt['value'] }}">
+                                <input type="radio" name="jawaban[{{ $item->id }}]" value="{{ $opt['value'] }}" required>
+                                <div class="option-key">{{ $opt['key'] }}</div>
+                                <span class="option-label">{{ $opt['label'] }}</span>
+                                <svg class="option-check" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            </label>
+                            @endforeach
+
+                        @elseif($item->tipe_jawaban == 'esai')
+                            <div class="esai-container">
+                                <textarea 
+                                    name="jawaban_teks[{{ $item->id }}]" 
+                                    class="w-full p-4 bg-white border-2 border-slate-200 rounded-2xl focus:border-indigo-500 focus:ring-0 transition text-sm font-medium" 
+                                    rows="6" 
+                                    placeholder="Ketik jawaban Anda di sini..."
+                                    oninput="this.closest('.slide').dataset.hasValue = (this.value.trim() !== '')"
+                                ></textarea>
+                                <p class="mt-2 text-xs text-slate-400 italic">Jawaban Anda akan tersimpan secara otomatis saat menekan tombol Lanjut.</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 @endforeach
@@ -444,26 +492,47 @@
             const pct = Math.round(((current + 1) / totalSlides) * 100);
             progressFill.style.width = pct + '%';
             currentNum.textContent = current + 1;
-
+    
             // Prev button
             btnPrev.style.visibility = current > 0 ? 'visible' : 'hidden';
-
+    
             // Next/Submit button state
             btnNext.style.display = 'inline-flex';
             btnSubmit.style.display = 'none';
-
-            const qid = slides[current].dataset.questionId;
-            btnNext.disabled = !answers[qid];
-
+    
+            const activeSlide = slides[current];
+            const qid = activeSlide.dataset.questionId;
+            
+            // Check if it's an essay or radio
+            const textarea = activeSlide.querySelector('textarea');
+            if (textarea) {
+                btnNext.disabled = textarea.value.trim() === '';
+                
+                // Add input listener for real-time validation if not already added
+                if (!textarea.dataset.hasListener) {
+                    textarea.addEventListener('input', function() {
+                        btnNext.disabled = this.value.trim() === '';
+                        answers[qid] = this.value.trim();
+                    });
+                    textarea.dataset.hasListener = 'true';
+                }
+            } else {
+                btnNext.disabled = !answers[qid];
+            }
+    
             // Restore selection state on revisit
             if (answers[qid]) {
-                const cards = slides[current].querySelectorAll('.option-card');
-                cards.forEach(c => {
-                    if (c.dataset.value === answers[qid]) {
-                        c.classList.add('selected');
-                        c.querySelector('input').checked = true;
-                    }
-                });
+                if (textarea) {
+                    textarea.value = answers[qid];
+                } else {
+                    const cards = activeSlide.querySelectorAll('.option-card');
+                    cards.forEach(c => {
+                        if (c.dataset.value == answers[qid]) {
+                            c.classList.add('selected');
+                            c.querySelector('input').checked = true;
+                        }
+                    });
+                }
             }
         }
 

@@ -53,6 +53,7 @@ class PertanyaanController extends Controller
             'isi_pertanyaan' => 'required|string',
             'tipe_jawaban' => 'required|in:pilihan_ganda,skala_likert,esai',
             'bobot' => 'required|numeric|min:0',
+            'opsi_jawaban' => 'nullable|string',
         ]);
 
         Pertanyaan::create($request->all());
@@ -75,6 +76,7 @@ class PertanyaanController extends Controller
             'isi_pertanyaan' => 'required|string',
             'tipe_jawaban' => 'required|in:pilihan_ganda,skala_likert,esai',
             'bobot' => 'required|numeric|min:0',
+            'opsi_jawaban' => 'nullable|string',
         ]);
 
         $pertanyaan->update($request->all());

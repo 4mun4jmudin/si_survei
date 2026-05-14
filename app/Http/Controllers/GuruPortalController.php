@@ -80,20 +80,30 @@ class GuruPortalController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'jawaban' => 'required|array',
-            'jawaban.*' => 'required|integer|min:1|max:5',
+            'jawaban' => 'nullable|array',
+            'jawaban_teks' => 'nullable|array',
         ]);
 
         try {
             DB::beginTransaction();
 
-            foreach ($request->jawaban as $pertanyaanId => $nilai) {
-                Jawaban::create([
+            // Ambil semua pertanyaan kuesioner ini
+            $pertanyaans = $kuesioner->pertanyaan;
+
+            foreach ($pertanyaans as $p) {
+                $data = [
                     'user_id' => $user->id,
                     'kuesioner_id' => $kuesioner->id,
-                    'pertanyaan_id' => $pertanyaanId,
-                    'nilai_jawaban' => $nilai,
-                ]);
+                    'pertanyaan_id' => $p->id,
+                ];
+
+                if ($p->tipe_jawaban == 'esai') {
+                    $data['jawaban_teks'] = $request->jawaban_teks[$p->id] ?? null;
+                } else {
+                    $data['nilai_jawaban'] = $request->jawaban[$p->id] ?? null;
+                }
+
+                Jawaban::create($data);
             }
 
             DB::commit();
