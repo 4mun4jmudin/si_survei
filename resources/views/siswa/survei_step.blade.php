@@ -546,7 +546,13 @@
                 goTo(current - 1);
             }
         });
-        btnNext.addEventListener('click', () => goTo(current + 1));
+        btnNext.addEventListener('click', () => {
+            if (current < totalSlides - 1) {
+                goTo(current + 1);
+            } else {
+                showCompletion();
+            }
+        });
 
         // Keyboard support
         document.addEventListener('keydown', (e) => {

@@ -480,7 +480,13 @@
                 updateUI();
             } else { goTo(current - 1); }
         });
-        btnNext.addEventListener('click', () => goTo(current + 1));
+        btnNext.addEventListener('click', () => {
+            if (current < totalSlides - 1) {
+                goTo(current + 1);
+            } else {
+                showCompletion();
+            }
+        });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === 'Enter') {
