@@ -86,6 +86,7 @@
                             <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Data</th>
                             <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Rata-rata Skor</th>
                             <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Kategori Penilaian</th>
+                            <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Rekomendasi Tindakan</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
@@ -108,6 +109,9 @@
                                         ($stat['kategori'] == 'Cukup' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700')) }}">
                                         {{ $stat['kategori'] }}
                                     </span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-600">
+                                    {{ $stat['rekomendasi'] }}
                                 </td>
                             </tr>
                         @empty

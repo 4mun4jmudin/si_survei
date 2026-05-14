@@ -137,13 +137,46 @@
             </div>
         @endif
 
-        <!-- Bagian 3: Ringkasan Analisis -->
-        <div class="section-title">C. KESIMPULAN & REKOMENDASI</div>
+        <!-- Bagian 3: Evaluasi & Rekomendasi Otomatis -->
+        <div class="section-title">C. EVALUASI DAN REKOMENDASI OTOMATIS (PER INDIKATOR)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="text-center" width="20%">Kategori/Indikator</th>
+                    <th class="text-center" width="15%">Rata-rata Skor</th>
+                    <th class="text-center" width="20%">Kriteria</th>
+                    <th class="text-center" width="45%">Rekomendasi Tindakan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($evaluasiOtomatis as $eval)
+                    <tr>
+                        <td><strong>{{ $eval['indikator'] }}</strong></td>
+                        <td class="text-center">{{ number_format($eval['rata_rata'], 2) }}</td>
+                        <td class="text-center">
+                            @if($eval['rata_rata'] >= 4.21)
+                                <span style="color: #166534; font-weight: bold;">{{ $eval['predikat'] }}</span>
+                            @elseif($eval['rata_rata'] >= 3.41)
+                                <span style="color: #1d4ed8; font-weight: bold;">{{ $eval['predikat'] }}</span>
+                            @elseif($eval['rata_rata'] >= 2.61)
+                                <span style="color: #ca8a04; font-weight: bold;">{{ $eval['predikat'] }}</span>
+                            @else
+                                <span style="color: #b91c1c; font-weight: bold;">{{ $eval['predikat'] }}</span>
+                            @endif
+                        </td>
+                        <td>{{ $eval['rekomendasi'] }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <!-- Bagian 4: Ringkasan Analisis Administrator -->
+        <div class="section-title">D. CATATAN & KESIMPULAN ADMINISTRATOR</div>
         <div class="summary-box">
             @if($laporan->ringkasan)
                 {!! nl2br(e($laporan->ringkasan)) !!}
             @else
-                <em>(Tidak ada catatan kesimpulan atau rekomendasi yang dilampirkan oleh administrator saat arsip laporan ini dibuat).</em>
+                <em>(Tidak ada catatan kesimpulan tambahan yang dilampirkan oleh administrator saat arsip laporan ini dibuat).</em>
             @endif
         </div>
 
