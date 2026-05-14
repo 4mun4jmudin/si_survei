@@ -109,6 +109,32 @@ class LaporanController extends Controller
             if (isset($clusteringResult['error'])) $clusteringResult = null;
         }
 
+        // Persiapkan data untuk AI
+        $dataForAi = [];
+        foreach ($indikators as $ind) {
+            $sum = 0;
+            $count = 0;
+            foreach ($jawabans as $j) {
+                $jInd = $j->indikator ?: 'Umum';
+                if ($jInd === $ind) {
+                    $sum += $j->nilai_jawaban;
+                    $count++;
+                }
+            }
+            $rataRata = $count > 0 ? $sum / $count : 0;
+            $dataForAi[] = [
+                'indikator' => $ind,
+                'rata_rata' => round($rataRata, 2)
+            ];
+        }
+
+        // Dapatkan rekomendasi AI via Cache (simpan 24 jam)
+        $cacheKey = 'ai_recommendations_kuesioner_' . $kuesioner->id;
+        $aiRecommendations = \Illuminate\Support\Facades\Cache::remember($cacheKey, 86400, function () use ($dataForAi) {
+            $gemini = new \App\Services\GeminiService();
+            return $gemini->generateRecommendations($dataForAi);
+        });
+
         // Evaluasi & Rekomendasi Otomatis Berdasarkan Indikator
         $evaluasiOtomatis = [];
         foreach ($indikators as $ind) {
@@ -125,27 +151,6 @@ class LaporanController extends Controller
             
             $predikat = '';
             $rekomendasi = '';
-            $rekomendasiKhusus = '';
-
-            // Menentukan rekomendasi khusus berdasarkan kata kunci pada indikator
-            $indLower = strtolower($ind);
-            if ($rataRata > 0 && $rataRata <= 3.40) { // Rekomendasi tambahan jika dirasa Cukup, Kurang, atau Sangat Kurang
-                if (str_contains($indLower, 'keamanan')) {
-                    $rekomendasiKhusus = ' Tindak Lanjut Spesifik: Tingkatkan upaya pencegahan, perketat pengawasan, dan pastikan SOP keamanan berjalan ketat.';
-                } elseif (str_contains($indLower, 'fasilitas') || str_contains($indLower, 'sarana')) {
-                    $rekomendasiKhusus = ' Tindak Lanjut Spesifik: Segera periksa kelayakan fasilitas terkait, lakukan perbaikan, atau sediakan pembaruan sarana yang memadai.';
-                } elseif (str_contains($indLower, 'layanan') || str_contains($indLower, 'pelayanan')) {
-                    $rekomendasiKhusus = ' Tindak Lanjut Spesifik: Berikan evaluasi pada staf pelayanan, tingkatkan responsivitas, dan adakan pelatihan service excellence jika perlu.';
-                } elseif (str_contains($indLower, 'pembelajaran') || str_contains($indLower, 'guru') || str_contains($indLower, 'akademik') || str_contains($indLower, 'materi') || str_contains($indLower, 'mengajar')) {
-                    $rekomendasiKhusus = ' Tindak Lanjut Spesifik: Evaluasi metode pengajaran, diskusikan kendala dengan pendidik, dan kembangkan variasi pembelajaran yang lebih interaktif.';
-                } elseif (str_contains($indLower, 'kebersihan') || str_contains($indLower, 'lingkungan')) {
-                    $rekomendasiKhusus = ' Tindak Lanjut Spesifik: Jadwalkan pembersihan lebih intensif dan tingkatkan kesadaran warga sekolah untuk menjaga lingkungan sekitar.';
-                } elseif (str_contains($indLower, 'komunikasi') || str_contains($indLower, 'informasi')) {
-                    $rekomendasiKhusus = ' Tindak Lanjut Spesifik: Perbaiki saluran komunikasi agar informasi lebih transparan, cepat, dan mudah diakses oleh seluruh pihak terkait.';
-                } else {
-                    $rekomendasiKhusus = ' Tindak Lanjut Spesifik: Lakukan identifikasi lebih mendalam pada area ' . $ind . ' untuk merumuskan solusi yang tepat sasaran.';
-                }
-            }
             
             if ($rataRata >= 4.21) {
                 $predikat = 'Sangat Baik';
@@ -155,16 +160,41 @@ class LaporanController extends Controller
                 $rekomendasi = 'Kembangkan lebih lanjut dan pertahankan konsistensi.';
             } elseif ($rataRata >= 2.61) {
                 $predikat = 'Cukup';
-                $rekomendasi = 'Lakukan evaluasi untuk mengetahui dan memperbaiki aspek yang masih kurang.' . $rekomendasiKhusus;
+                $rekomendasi = 'Lakukan evaluasi untuk mengetahui dan memperbaiki aspek yang masih kurang.';
             } elseif ($rataRata >= 1.81) {
                 $predikat = 'Kurang';
-                $rekomendasi = 'Perlu perbaikan segera. Lakukan peninjauan ulang terhadap prosedur dan layanan.' . $rekomendasiKhusus;
+                $rekomendasi = 'Perlu perbaikan segera. Lakukan peninjauan ulang terhadap prosedur dan layanan.';
             } elseif ($rataRata > 0) {
                 $predikat = 'Sangat Kurang';
-                $rekomendasi = 'Tindakan mendesak diperlukan. Identifikasi masalah fundamental dan perbaiki total.' . $rekomendasiKhusus;
+                $rekomendasi = 'Tindakan mendesak diperlukan. Identifikasi masalah fundamental dan perbaiki total.';
             } else {
                 $predikat = 'Belum Ada Data';
                 $rekomendasi = '-';
+            }
+
+            // Gunakan rekomendasi cerdas dari AI jika tersedia, jika tidak gunakan fallback rekomendasi khusus statis
+            if (isset($aiRecommendations[$ind]) && !empty($aiRecommendations[$ind])) {
+                $rekomendasi .= ' Analisis AI: ' . $aiRecommendations[$ind];
+            } else {
+                // Menentukan rekomendasi khusus berdasarkan kata kunci pada indikator
+                $indLower = strtolower($ind);
+                if ($rataRata > 0 && $rataRata <= 3.40) { // Rekomendasi tambahan jika dirasa Cukup, Kurang, atau Sangat Kurang
+                    if (str_contains($indLower, 'keamanan')) {
+                        $rekomendasi .= ' Tindak Lanjut Spesifik: Tingkatkan upaya pencegahan, perketat pengawasan, dan pastikan SOP keamanan berjalan ketat.';
+                    } elseif (str_contains($indLower, 'fasilitas') || str_contains($indLower, 'sarana')) {
+                        $rekomendasi .= ' Tindak Lanjut Spesifik: Segera periksa kelayakan fasilitas terkait, lakukan perbaikan, atau sediakan pembaruan sarana yang memadai.';
+                    } elseif (str_contains($indLower, 'layanan') || str_contains($indLower, 'pelayanan')) {
+                        $rekomendasi .= ' Tindak Lanjut Spesifik: Berikan evaluasi pada staf pelayanan, tingkatkan responsivitas, dan adakan pelatihan service excellence jika perlu.';
+                    } elseif (str_contains($indLower, 'pembelajaran') || str_contains($indLower, 'guru') || str_contains($indLower, 'akademik') || str_contains($indLower, 'materi') || str_contains($indLower, 'mengajar')) {
+                        $rekomendasi .= ' Tindak Lanjut Spesifik: Evaluasi metode pengajaran, diskusikan kendala dengan pendidik, dan kembangkan variasi pembelajaran yang lebih interaktif.';
+                    } elseif (str_contains($indLower, 'kebersihan') || str_contains($indLower, 'lingkungan')) {
+                        $rekomendasi .= ' Tindak Lanjut Spesifik: Jadwalkan pembersihan lebih intensif dan tingkatkan kesadaran warga sekolah untuk menjaga lingkungan sekitar.';
+                    } elseif (str_contains($indLower, 'komunikasi') || str_contains($indLower, 'informasi')) {
+                        $rekomendasi .= ' Tindak Lanjut Spesifik: Perbaiki saluran komunikasi agar informasi lebih transparan, cepat, dan mudah diakses oleh seluruh pihak terkait.';
+                    } else {
+                        $rekomendasi .= ' Tindak Lanjut Spesifik: Lakukan identifikasi lebih mendalam pada area ' . $ind . ' untuk merumuskan solusi yang tepat sasaran.';
+                    }
+                }
             }
 
             $evaluasiOtomatis[] = [
