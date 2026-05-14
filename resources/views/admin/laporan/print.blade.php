@@ -170,8 +170,65 @@
             </tbody>
         </table>
 
-        <!-- Bagian 4: Ringkasan Analisis Administrator -->
-        <div class="section-title">D. CATATAN & KESIMPULAN ADMINISTRATOR</div>
+        <!-- Bagian 4: Distribusi Jawaban Pilihan Ganda -->
+        @if(count($distribusiPG) > 0)
+        <div class="section-title" style="page-break-before: always;">D. DISTRIBUSI JAWABAN PILIHAN GANDA</div>
+        @foreach($distribusiPG as $qText => $dist)
+            <div style="margin-bottom: 20px;">
+                <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">{{ $loop->iteration }}. {{ $qText }}</p>
+                @php
+                    $rawOptions = explode("\n", str_replace("\r", "", $dist['opsi']));
+                    $optionLabels = [];
+                    foreach($rawOptions as $line) {
+                        if(trim($line) == "") continue;
+                        if(str_contains($line, '|')) {
+                            $parts = explode('|', $line);
+                            $optionLabels[trim($parts[1])] = trim($parts[0]);
+                        } else {
+                            $optionLabels[] = trim($line);
+                        }
+                    }
+                    $totalQ = $dist['data']->sum('total');
+                @endphp
+                <table style="margin-bottom: 10px;">
+                    <thead>
+                        <tr>
+                            <th>Opsi Jawaban</th>
+                            <th class="text-center" width="20%">Jumlah</th>
+                            <th class="text-center" width="20%">Persentase</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($dist['data'] as $d)
+                            <tr>
+                                <td>{{ $optionLabels[$d->nilai_jawaban] ?? 'Opsi ' . $d->nilai_jawaban }}</td>
+                                <td class="text-center">{{ $d->total }}</td>
+                                <td class="text-center">{{ $totalQ > 0 ? round(($d->total / $totalQ) * 100, 1) : 0 }}%</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endforeach
+        @endif
+
+        <!-- Bagian 5: Analisis Jawaban Esai -->
+        @if(count($jawabanEsai) > 0)
+        <div class="section-title" style="page-break-before: always;">E. KUMPULAN JAWABAN ESAI (KRITIK & SARAN)</div>
+        @foreach($jawabanEsai as $qText => $answers)
+            <div style="margin-bottom: 20px;">
+                <p style="font-size: 12px; font-weight: bold; margin-bottom: 10px; background: #f0f0f0; padding: 5px;">{{ $qText }}</p>
+                <ul style="font-size: 11px; color: #555; padding-left: 20px;">
+                    @foreach($answers as $ans)
+                        <li style="margin-bottom: 8px;"><em>"{{ $ans->jawaban_teks }}"</em></li>
+                    @endforeach
+                </ul>
+            </div>
+        @endforeach
+        @endif
+
+        <!-- Bagian 6: Ringkasan Analisis Administrator -->
+        <div class="section-title">F. CATATAN & KESIMPULAN ADMINISTRATOR</div>
         <div class="summary-box">
             @if($laporan->ringkasan)
                 {!! nl2br(e($laporan->ringkasan)) !!}

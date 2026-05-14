@@ -123,6 +123,89 @@
                 </table>
             </div>
         </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Distribusi Pilihan Ganda -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 bg-gray-50/50">
+                    <h3 class="text-lg font-semibold text-gray-800">Distribusi Pilihan Ganda</h3>
+                    <p class="text-sm text-gray-500">Frekuensi jawaban untuk setiap opsi pada tipe soal Pilihan Ganda.</p>
+                </div>
+                <div class="p-6 space-y-8">
+                    @forelse($distribusiPG as $qText => $dist)
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-700 mb-4">{{ $qText }}</h4>
+                            <div class="space-y-3">
+                                @php
+                                    $rawOptions = explode("\n", str_replace("\r", "", $dist['opsi']));
+                                    $optionLabels = [];
+                                    foreach($rawOptions as $line) {
+                                        if(trim($line) == "") continue;
+                                        if(str_contains($line, '|')) {
+                                            $parts = explode('|', $line);
+                                            $optionLabels[trim($parts[1])] = trim($parts[0]);
+                                        } else {
+                                            $optionLabels[] = trim($line); // Fallback
+                                        }
+                                    }
+                                    $totalQ = $dist['data']->sum('total');
+                                @endphp
+                                @foreach($dist['data'] as $d)
+                                    <div class="relative">
+                                        <div class="flex justify-between text-xs mb-1">
+                                            <span class="font-medium text-gray-600">{{ $optionLabels[$d->nilai_jawaban] ?? 'Opsi ' . $d->nilai_jawaban }}</span>
+                                            <span class="font-bold text-indigo-600">{{ $d->total }} ({{ $totalQ > 0 ? round(($d->total / $totalQ) * 100, 1) : 0 }}%)</span>
+                                        </div>
+                                        <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                            <div class="h-full bg-indigo-500 rounded-full" style="width: {{ $totalQ > 0 ? ($d->total / $totalQ) * 100 : 0 }}%"></div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-8">
+                            <p class="text-sm text-gray-400 italic">Tidak ada data pilihan ganda khusus.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Jawaban Esai -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 bg-gray-50/50">
+                    <h3 class="text-lg font-semibold text-gray-800">Kumpulan Jawaban Esai</h3>
+                    <p class="text-sm text-gray-500">Masukan kualitatif (kritik/saran) dari para responden.</p>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-6 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                        @forelse($jawabanEsai as $qText => $answers)
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-700 mb-3 sticky top-0 bg-white py-1">{{ $qText }}</h4>
+                                <div class="space-y-3">
+                                    @foreach($answers as $ans)
+                                        <div class="p-3 bg-gray-50 rounded-xl border border-gray-100 text-sm text-gray-600 italic">
+                                            "{{ $ans->jawaban_teks }}"
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center py-8">
+                                <p class="text-sm text-gray-400 italic">Tidak ada jawaban esai masuk.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+        </style>
     @else
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
             <svg class="w-16 h-16 text-gray-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>

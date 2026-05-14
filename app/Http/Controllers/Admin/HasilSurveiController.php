@@ -126,9 +126,46 @@ class HasilSurveiController extends Controller
                 'total_responden' => $totalResponden,
                 'rata_rata_skor' => round($rataRataSkor ?? 0, 2),
             ];
+
+            // Jawaban Esai
+            $jawabanEsai = DB::table('jawaban')
+                ->join('pertanyaan', 'jawaban.pertanyaan_id', '=', 'pertanyaan.id')
+                ->where('jawaban.kuesioner_id', $selectedKuesionerId)
+                ->where('pertanyaan.tipe_jawaban', 'esai')
+                ->whereNotNull('jawaban.jawaban_teks')
+                ->select('pertanyaan.isi_pertanyaan', 'jawaban.jawaban_teks')
+                ->get()
+                ->groupBy('isi_pertanyaan');
+
+            // Distribusi Pilihan Ganda (yang bukan skala likert)
+            $pertanyaanPG = Pertanyaan::where('kuesioner_id', $selectedKuesionerId)
+                ->where('tipe_jawaban', 'pilihan_ganda')
+                ->get();
+            
+            $distribusiPG = [];
+            foreach ($pertanyaanPG as $p) {
+                $counts = DB::table('jawaban')
+                    ->where('pertanyaan_id', $p->id)
+                    ->select('nilai_jawaban', DB::raw('count(*) as total'))
+                    ->groupBy('nilai_jawaban')
+                    ->get();
+                
+                $distribusiPG[$p->isi_pertanyaan] = [
+                    'opsi' => $p->opsi_jawaban,
+                    'data' => $counts
+                ];
+            }
         }
 
-        return view('admin.hasil_survei.index', compact('kuesioners', 'selectedKuesionerId', 'kuesioner', 'statistik', 'indikatorStats'));
+        return view('admin.hasil_survei.index', compact(
+            'kuesioners', 
+            'selectedKuesionerId', 
+            'kuesioner', 
+            'statistik', 
+            'indikatorStats',
+            'jawabanEsai',
+            'distribusiPG'
+        ));
     }
 
     public function exportExcel($kuesioner_id)

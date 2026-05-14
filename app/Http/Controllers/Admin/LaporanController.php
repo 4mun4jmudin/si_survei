@@ -205,6 +205,31 @@ class LaporanController extends Controller
             ];
         }
 
-        return view('admin.laporan.print', compact('laporan', 'kuesioner', 'statistik', 'clusteringResult', 'evaluasiOtomatis'));
+        // Tambahan data Esai untuk laporan
+        $jawabanEsai = DB::table('jawaban')
+            ->join('pertanyaan', 'jawaban.pertanyaan_id', '=', 'pertanyaan.id')
+            ->where('jawaban.kuesioner_id', $kuesioner->id)
+            ->where('pertanyaan.tipe_jawaban', 'esai')
+            ->whereNotNull('jawaban.jawaban_teks')
+            ->select('pertanyaan.isi_pertanyaan', 'jawaban.jawaban_teks')
+            ->get()
+            ->groupBy('isi_pertanyaan');
+
+        // Distribusi PG untuk laporan
+        $pertanyaanPG = $kuesioner->pertanyaan()->where('tipe_jawaban', 'pilihan_ganda')->get();
+        $distribusiPG = [];
+        foreach ($pertanyaanPG as $p) {
+            $counts = DB::table('jawaban')
+                ->where('pertanyaan_id', $p->id)
+                ->select('nilai_jawaban', DB::raw('count(*) as total'))
+                ->groupBy('nilai_jawaban')
+                ->get();
+            $distribusiPG[$p->isi_pertanyaan] = [
+                'opsi' => $p->opsi_jawaban,
+                'data' => $counts
+            ];
+        }
+
+        return view('admin.laporan.print', compact('laporan', 'kuesioner', 'statistik', 'clusteringResult', 'evaluasiOtomatis', 'jawabanEsai', 'distribusiPG'));
     }
 }
