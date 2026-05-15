@@ -19,6 +19,9 @@ class PertanyaanController extends Controller
         if ($request->filled('kuesioner_id')) {
             $query->where('kuesioner_id', $request->kuesioner_id);
         }
+        if ($request->filled('tipe_jawaban')) {
+            $query->where('tipe_jawaban', $request->tipe_jawaban);
+        }
 
         $pertanyaans = $query->orderBy('nomor_urutan')->paginate(10);
         $kuesioners = Kuesioner::all();

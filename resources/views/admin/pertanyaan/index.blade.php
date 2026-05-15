@@ -27,6 +27,12 @@
                         </option>
                     @endforeach
                 </select>
+                <select name="tipe_jawaban" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Semua Tipe</option>
+                    <option value="pilihan_ganda" {{ request('tipe_jawaban') == 'pilihan_ganda' ? 'selected' : '' }}>Pilihan Ganda</option>
+                    <option value="skala_likert" {{ request('tipe_jawaban') == 'skala_likert' ? 'selected' : '' }}>Skala Likert</option>
+                    <option value="esai" {{ request('tipe_jawaban') == 'esai' ? 'selected' : '' }}>Esai / Teks</option>
+                </select>
                 <button type="submit" class="px-5 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-200 transition">Filter</button>
             </form>
         </div>
