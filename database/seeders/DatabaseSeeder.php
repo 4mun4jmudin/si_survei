@@ -39,6 +39,11 @@ class DatabaseSeeder extends Seeder
             'role' => 'siswa',
         ]);
 
-        $this->call(SurveySimulationSeeder::class);
+        $this->call([
+            SiswaSeeder::class,
+            GuruSeeder::class,
+            PertanyaanSeeder::class,
+            // SurveySimulationSeeder::class, // Matikan simulasi dummy
+        ]);
     }
 }
