@@ -8,6 +8,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/api/search-siswa', function (\Illuminate\Http\Request $request) {
+    $q = $request->query('q');
+    if (strlen($q) < 2) return response()->json([]);
+
+    $siswas = \App\Models\Siswa::where('nama_lengkap', 'like', "%$q%")
+        ->orWhere('nis', 'like', "%$q%")
+        ->limit(8)
+        ->get(['nis', 'nama_lengkap', 'kelas']);
+
+    return response()->json($siswas);
+});
+
 Route::get('/dashboard', function () {
     if (auth()->user()->role === 'admin') {
         return redirect()->route('admin.dashboard');

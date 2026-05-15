@@ -1,0 +1,121 @@
+# X RPL 1
+
+| No | Nomor Induk | Nama Siswa             |
+| -- | ----------- | ---------------------- |
+| 1  | -           | ANDRI RISMA NURITA     |
+| 2  | -           | DEDE IHSAN HUDA        |
+| 3  | -           | DERI FEBRIANSYAH ARDI  |
+| 4  | -           | FAZLI NORDIKZY NUGRAHA |
+| 5  | -           | FERDIAN                |
+| 6  | -           | GIBRAN MUSYAKIB        |
+| 7  | -           | JEFRI AL FAJAR         |
+| 8  | -           | MUHAMMAD PRATAMA RYOSA |
+| 9  | -           | MUHAMMAD REFA          |
+| 10 | -           | MUHAMMAD ZEINA ARIP    |
+| 11 | -           | MUHAMMAD ZULFIKAR      |
+| 12 | -           | NOVI NENGSIH           |
+| 13 | -           | NUNUNG SANTI NURFENI   |
+| 14 | -           | SEPTIANA               |
+| 15 | -           | SRI KHAZANAH           |
+| 16 | -           | SUGIANTI               |
+| 17 | -           | VICKY ALZIEN F         |
+
+---
+
+# XI RPL 1
+
+| No | Nomor Induk | Nama Siswa                |
+| -- | ----------- | ------------------------- |
+| 1  | 242510002   | AHMAD TSABIT              |
+| 2  | 242510003   | AGNIA NURUL HASANAH       |
+| 3  | 242510004   | AGUNG NOVA KURNIAWAN      |
+| 4  | 242510005   | AHMAD RIYADI              |
+| 5  | 242510006   | AL MUSTAFAHATUNNISA       |
+| 6  | 242510007   | ANNISA NUR AZIZAH         |
+| 7  | 242510008   | AVRILIA DEWANTI           |
+| 8  | 242510009   | CAHYA NUR AINI            |
+| 9  | 242510010   | DIKI AHMAD RAMDAN         |
+| 10 | 242510011   | DITA PUSPITA              |
+| 11 | 242510012   | FADZANA ABDUL AZIZ        |
+| 12 | 242510013   | FIKRI ABDUL AZIZ          |
+| 13 | 242510014   | HUSNA QONITAH AZAHRA      |
+| 14 | 242510015   | KENETH ASFA APRILIA       |
+| 15 | 242510016   | KHOLIFATUL JANNAH         |
+| 16 | 242510017   | MAYLAH NIZAYA AZALIA      |
+| 17 | 242510018   | MOCH. SANDI FAUZI         |
+| 18 | 242510019   | MUHAMMAD AGIL RAMDHANA    |
+| 19 | 242510020   | MUHAMMAD AKBAR TAUFIK     |
+| 20 | 242510021   | MUHAMMAD DAVA FADILAH     |
+| 21 | 242510022   | MUKHLIS IBADURAHMAN       |
+| 22 | 242510023   | MUHAMMAD RIZKI            |
+| 23 | 242510024   | NOVAL SEVENTIN GUNAWAN    |
+| 24 | 242510025   | NUR FAUZAN                |
+| 25 | 242510026   | REHAN RAMADONA WIDIAWAN   |
+| 26 | 242510027   | RIZKA OCTAVIA FITRI       |
+| 27 | 242510028   | ROVI SAPUTRA              |
+| 28 | 242510029   | SITI ALIYAH MAULANI       |
+| 29 | 242510030   | SHEREN AGUSTINA           |
+| 30 | 242510031   | TANTI DEWI NURJANAH       |
+| 31 | 242510032   | TIARA KHOLILATULLOHIAH MS |
+| 32 | 242510033   | TIARA NURSYA AINI         |
+
+---
+
+# XII RPL 1
+
+| No | Nomor Induk | Nama Siswa                   |
+| -- | ----------- | ---------------------------- |
+| 1  | 232410001   | AUDI FITRI YULIA             |
+| 2  | 232410002   | ABDURAH EL SHOFWA            |
+| 3  | 232410003   | ALFIANI LESTARI              |
+| 4  | 232410005   | AJENG ALFARISTY TATA AZZAHRA |
+| 5  | 232410006   | ANISA MASYITOH               |
+| 6  | 232410007   | BILLA SIFA YON ANWAR         |
+| 7  | 232410008   | DELISA PUTRI KAMILLA         |
+| 8  | 232410009   | DILA AYU NINGRUM             |
+| 9  | 232410013   | DWI FITRIANI                 |
+| 10 | 232410014   | FITRAH FIRMAN SYAH           |
+| 11 | 232410015   | HANI NUR HASANAH             |
+| 12 | 232410020   | ILHAA FAJAR PADILAH          |
+| 13 | 232410021   | KENIA SYIFA RAMADHANI        |
+| 14 | 232410030   | M. ALI MUFLIH KHASANI        |
+| 15 | 232410037   | RAIHAN ABDUL YASIN           |
+| 16 | 232410038   | SALSABILA NURAZIZAH          |
+| 17 | 232410031   | NOVAL RIZKI                  |
+| 18 | 232410032   | NURUL AMELIA                 |
+| 19 | 232410035   | RAFLI AHMAD ALFARIG          |
+| 20 | 232410036   | RAJA AGUNG RAHARJA           |
+| 21 | 232410052   | SALMA KAMILA                 |
+| 22 | 232410053   | SHIFA RIZKI AMALIATI         |
+| 23 | 232410048   | VAYHA HANDIKA                |
+
+---
+
+# XII RPL 2
+
+| No | Nomor Induk | Nama Siswa                   |
+| -- | ----------- | ---------------------------- |
+| 1  | 232410001   | ARNI NURAINI                 |
+| 2  | 232410037   | CEPI WILDAN                  |
+| 3  | 232410004   | DWI LESTARI                  |
+| 4  | 232410010   | ELTIDA SUSANTI               |
+| 5  | 232410011   | ENJAL JUNIAR                 |
+| 6  | 232410018   | ENJUL AINI                   |
+| 7  | 232410019   | EVA NURRAHMAH                |
+| 8  | 232410021   | FERNI ASTUTI                 |
+| 9  | 232410022   | KESHA NURAFIAH               |
+| 10 | 232410025   | KOHLAMA DILLA FABRIZA        |
+| 11 | 232410026   | M. ALFIAN TRI KURNIAWAN      |
+| 12 | 232410023   | MUHAMAD DOSTHY QOUSQULZAH    |
+| 13 | 232410024   | MUHAMAD RIZKI                |
+| 14 | 232410033   | NUR ROFIQ FEBRI ABDULLAH     |
+| 15 | 232410036   | NURUL HIDAYAH                |
+| 16 | 232410026   | MUHAMAD AL FAKHRI FATURROHIM |
+| 17 | 232410038   | RAHMAT                       |
+| 18 | 232410042   | RIFDI WILHAMAD MA'DUDDIN     |
+| 19 | 232410043   | RIKO WIJAYA                  |
+| 20 | 232410044   | RIZAL MUHAMMAD FAUZI         |
+| 21 | 232410045   | SELVI NURJANNAH              |
+| 22 | 232410046   | SITI ANGGINI                 |
+| 23 | 232410047   | TIAN NUR INSYAH              |
+| 24 | 232410049   | TIDORI PUTRA RAMADHAN        |
